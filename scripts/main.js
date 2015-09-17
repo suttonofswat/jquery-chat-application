@@ -1,12 +1,26 @@
 'use strict';
 
 $(document).ready(function() {
+	var $username =$('#username');
+	var $usernameForm= $('#usernameForm')
 	var $chatList = $('#chatList');
-	var $form = $('form');
+	var $chatForm = $('#chatForm');
 	var $message = $('#inputMsg');
+	var $newUN = $username.val();
+
+	
+	
+	$usernameForm.submit(function(e){
+		e.preventDefault();
+		$newUN = $username.val();
+		console.log($newUN);
+		$usernameForm.text('welcome'+' '+$newUN);
+
+		
+	});
 
 
-	$form.submit(function(e){
+	$chatForm.submit(function(e){
 		e.preventDefault();
 
 		var $newMessage = $message.val();
@@ -15,8 +29,8 @@ $(document).ready(function() {
 
 		$.post(
 
-			'http://tiyfe.herokuapp.com/collections/leslie-chat',
-			{message: $newMessage, timeSince: date},
+			'http://tiyfe.herokuapp.com/collections/leslie-chat2',
+			{username: $newUN, message: $newMessage, timeSince: date},
 
 			'json'
 
@@ -29,14 +43,17 @@ $(document).ready(function() {
 		$.get(
 			
 			
-			'http://tiyfe.herokuapp.com/collections/leslie-chat',
+			'http://tiyfe.herokuapp.com/collections/leslie-chat2',
 			function(response) {
 				$chatList.html('');
+
 				response.reverse();
 					for(var i=0; i<response.length; i++){
-						$chatList.append('<div>'+'<div class="chatWin">'+response[i].message+'</div>'+'<div class="chatDate">'+moment(response[i].timeSince).fromNow()+'</div>'+'</div>');
+						$chatList.append('<div>'+'<div class="chatWin">'+response[i].username+'</div>'+'<div class="chatWin">'+response[i].message+'</div>'+'<div class="chatDate">'+moment(response[i].timeSince).fromNow()+'</div>'+'</div>');
 
 					}
+					$('.chatWin').emoticonize();
+
 			},
 			'json'
 		);
